@@ -5,6 +5,9 @@ import datetime
 from urllib import parse, request
 import re
 
+from decouple import config
+
+
 # Con esto asignamos el caracter especial para darle instrucciones al bot. description es opcional
 bot = commands.Bot(command_prefix=">", description="I am the discord robot :)")
 
@@ -43,6 +46,12 @@ async def youtube(ctx, *, search):
     search_results = re.findall( r"watch\?v=(\S{11})", html_content.read().decode()) # para obtener los id de los videos
     await ctx.send("https://www.youtube.com/watch?v=" + search_results[0]) # envia una caja con el primer video conseguido :)
 
+@bot.command()
+async def buscar(ctx, *, search):
+    query_search = parse.urlencode({"search_query": search})
+    print(query_search)
+
+
 # Events
 @bot.event
 async def on_ready():
@@ -51,6 +60,6 @@ async def on_ready():
 
     print("The Robot is alive") # cuando se conecte dirá esto
 
+token_bot = config("TOKEN_BOT")
 
-
-bot.run("ODI0MzA1OTQ4MDYzMDM5NTc4.YFtcvA.SsPUx27l0v1emRq09ajUvRNdRJI")
+bot.run(token_bot)
