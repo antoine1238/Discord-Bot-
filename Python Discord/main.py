@@ -41,15 +41,21 @@ async def info(ctx):
 
 @bot.command()
 async def youtube(ctx, *, search):
-    query_search = parse.urlencode({"search_query": search}) # transforma palabras comunes en direcciones a internet. ejemplo: quita espacios y agrega % etc.
+    query_search = parse.urlencode({"search_query": search}) # transforma palabras comunes en direcciones a internet. ejemplo: quita espacios y agrega + etc.
     html_content = request.urlopen("https://www.youtube.com/results?" + query_search)
     search_results = re.findall( r"watch\?v=(\S{11})", html_content.read().decode()) # para obtener los id de los videos
     await ctx.send("https://www.youtube.com/watch?v=" + search_results[0]) # envia una caja con el primer video conseguido :)
+    print(query_search)
+    print("*****************")
+    print(html_content)
+
+
 
 @bot.command()
-async def buscar(ctx, *, search):
-    query_search = parse.urlencode({"search_query": search})
-    print(query_search)
+async def wiki(ctx, *, search):
+    query_search = search.replace(" ", "_")
+    url_completa = "https://es.wikipedia.org/wiki/" + query_search
+    await ctx.send(url_completa)
 
 
 # Events
